@@ -105,7 +105,7 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines that emphasize governance implications, strategic oversight, or board-level decisions. Frame them as questions or imperatives that boards must address.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that emphasize governance implications, strategic oversight, or board-level decisions. Frame them as questions or imperatives that boards must address.
 
 2. EXECUTIVE BRIEFING ({word_count} words): Write in a deliberative, governance-focused style with these subheadings:
    - **Strategic Oversight Implications**: What board-level decisions or oversight questions emerge?
@@ -118,7 +118,10 @@ Please provide:
 
 4. QUESTIONS FOR THE BOARD TO CONSIDER: Provide 5 probing questions that boards should discuss in executive session or with management
 
-5. BOARD ACTION ITEMS: List 3-5 specific oversight actions, committee assignments, or governance processes boards should implement""",
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal governance wisdom, board dynamics, or strategic oversight insights. For each quote:
+   - Provide the exact quote (in quotation marks)
+   - Add 1-2 sentences explaining why this matters for board effectiveness or what governance principle it illustrates
+   - Choose quotes that address fiduciary duty, oversight, risk, or strategic governance""",
 
                         "CEOs": f"""Analyze this executive interview transcript and create a CEO-focused synthesis emphasizing decisions, execution, and competitive positioning.
 
@@ -129,7 +132,7 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} action-oriented headlines that frame decisions, trade-offs, or competitive moves. Make them direct and decisive.
+1. HEADLINE OPTIONS: Generate {num_headlines} action-oriented headlines (maximum 8 words each) that frame decisions, trade-offs, or competitive moves. Make them direct and decisive.
 
 2. EXECUTIVE DECISION BRIEF ({word_count} words): Write in a direct, pragmatic style with these subheadings:
    - **The Decision on the Table**: What choices must be made NOW?
@@ -142,7 +145,10 @@ Please provide:
 
 4. IMMEDIATE ACTIONS: List 5 specific decisions or initiatives the CEO should launch this quarter
 
-5. KEY PERFORMANCE INDICATORS TO TRACK: Identify 3-5 metrics the CEO should monitor to measure progress""",
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal decision-making wisdom, execution insights, or competitive thinking. For each quote:
+   - Provide the exact quote (in quotation marks)
+   - Add 1-2 sentences explaining why this matters for CEO effectiveness or what it reveals about strategic decision-making
+   - Choose quotes that are tactical, decisive, or reveal hard-won lessons about leading organizations""",
 
                         "Senior Executives": f"""Analyze this executive interview transcript and create a synthesis focused on implementation, capability-building, and leading change.
 
@@ -153,7 +159,7 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines that emphasize implementation challenges, organizational capabilities, or change management imperatives.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that emphasize implementation challenges, organizational capabilities, or change management imperatives.
 
 2. LEADERSHIP IMPLEMENTATION GUIDE ({word_count} words): Write in a practical, team-oriented style with these subheadings:
    - **The Implementation Challenge**: What does this mean for translating strategy into action?
@@ -166,7 +172,10 @@ Please provide:
 
 4. HOW TO APPLY THIS IN YOUR ORGANIZATION: Provide 5 specific actions senior executives can take with their teams in the next 30 days
 
-5. COMMON PITFALLS TO AVOID: Identify 3-5 mistakes that derail implementation and how to avoid them""",
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal implementation wisdom, change leadership insights, or team dynamics. For each quote:
+   - Provide the exact quote (in quotation marks)
+   - Add 1-2 sentences explaining why this matters for execution or what it reveals about leading organizational change
+   - Choose quotes that are practical, honest about challenges, or reveal lessons about mobilizing teams""",
 
                         "HR Leaders": f"""Analyze this executive interview transcript and create a synthesis focused on talent development, organizational culture, and leadership capabilities.
 
@@ -177,7 +186,7 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines that emphasize leadership competencies, culture shifts, talent development, or people challenges.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that emphasize leadership competencies, culture shifts, talent development, or people challenges.
 
 2. TALENT & LEADERSHIP INSIGHTS ({word_count} words): Write in a developmental, people-centered style with these subheadings:
    - **Leadership Competencies on Display**: What leadership capabilities, behaviors, or mindsets are demonstrated?
@@ -190,7 +199,7 @@ Please provide:
 
 4. APPLICATIONS FOR HR LEADERS: Provide 5 specific ways to apply these insights in leadership development programs, coaching, or talent processes
 
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful, memorable quotes from the transcript that reveal leadership wisdom, authentic experiences, or compelling insights. For each quote:
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal leadership wisdom, authentic experiences, or compelling insights. For each quote:
    - Provide the exact quote (in quotation marks)
    - Add 1-2 sentences explaining why this quote matters for leadership development or what it reveals about effective leadership
    - Choose quotes that are vivid, honest, surprising, or particularly instructive""",
@@ -204,7 +213,7 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} engaging, accessible headlines that capture the most interesting or surprising elements for a general business reader.
+1. HEADLINE OPTIONS: Generate {num_headlines} engaging, accessible headlines (maximum 8 words each) that capture the most interesting or surprising elements for a general business reader.
 
 2. EXECUTIVE PERSPECTIVE ({word_count} words): Write in clear, journalistic style with these subheadings:
    - **The Big Picture**: What's the overarching insight or trend?
@@ -217,7 +226,10 @@ Please provide:
 
 4. PRACTICAL APPLICATIONS: List 5 ways readers can apply these insights in their own roles or organizations
 
-5. QUESTIONS FOR REFLECTION: Provide 3-5 thought-provoking questions readers should consider about their own businesses"""
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that are memorable, surprising, or particularly instructive for a business audience. For each quote:
+   - Provide the exact quote (in quotation marks)
+   - Add 1-2 sentences explaining why this matters or what makes it noteworthy
+   - Choose quotes that are accessible, thought-provoking, or challenge conventional business thinking"""
                     }
                     
                     # Select the appropriate prompt based on audience
