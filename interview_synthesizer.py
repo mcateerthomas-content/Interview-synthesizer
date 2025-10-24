@@ -30,30 +30,55 @@ st.markdown("""
 st.title("🎯 Executive Interview Synthesizer")
 st.markdown("Transform interview transcripts into targeted summaries for multiple audiences simultaneously.")
 
-# Initialize session state
-if 'api_key' not in st.session_state:
-    st.session_state.api_key = ""
+# Check for API key in Streamlit Secrets
+try:
+    api_key = st.secrets["ANTHROPIC_API_KEY"]
+    api_key_configured = True
+except:
+    api_key_configured = False
 
-# Sidebar for API key
+# Sidebar
 with st.sidebar:
-    st.header("⚙️ Configuration")
-    api_key = st.text_input("Anthropic API Key:", 
-                            type="password", 
-                            value=st.session_state.api_key,
-                            help="Enter your Anthropic API key")
-    if api_key:
-        st.session_state.api_key = api_key
-        st.success("✓ API key configured")
+    st.header("ℹ️ About")
+    st.info("This tool processes interview transcripts and generates customized summaries for different executive audiences with distinct perspectives and priorities.")
+    
+    if api_key_configured:
+        st.success("✅ API key configured securely")
     else:
-        st.warning("Please enter your API key")
+        st.error("⚠️ API key not found in Streamlit Secrets")
+        st.markdown("""
+        **Setup Instructions:**
+        1. Go to your Streamlit app settings
+        2. Navigate to 'Secrets' section
+        3. Add: `ANTHROPIC_API_KEY = "your-key-here"`
+        4. Save and reboot the app
+        """)
     
     st.divider()
-    st.markdown("### About")
-    st.info("This tool processes interview transcripts and generates customized summaries for different executive audiences with distinct perspectives and priorities.")
+    st.markdown("### 📊 Usage Statistics")
+    if 'total_summaries' not in st.session_state:
+        st.session_state.total_summaries = 0
+    st.metric("Total Summaries Generated", st.session_state.total_summaries)
 
 # Main content area
-if not st.session_state.api_key:
-    st.warning("👈 Please enter your Anthropic API key in the sidebar to continue")
+if not api_key_configured:
+    st.error("🔐 **API Key Not Configured**")
+    st.markdown("""
+    This app requires an Anthropic API key to be configured in Streamlit Secrets.
+    
+    **For App Administrator:**
+    1. Go to [Streamlit Cloud Dashboard](https://app.streamlit.io)
+    2. Click on your app's settings (⋮ menu)
+    3. Select "Settings" → "Secrets"
+    4. Add the following:
+    ```toml
+    ANTHROPIC_API_KEY = "sk-ant-xxxxx"
+    ```
+    5. Save and restart the app
+    
+    **For Team Members:**
+    Please contact your administrator to ensure the API key is configured.
+    """)
 else:
     # Create two columns
     col1, col2 = st.columns([1, 1])
@@ -83,8 +108,8 @@ else:
             elif transcript:
                 with st.spinner(f"Generating summaries for {len(selected_audiences)} audience(s)..."):
                     try:
-                        # Initialize Anthropic client
-                        client = anthropic.Anthropic(api_key=st.session_state.api_key)
+                        # Initialize Anthropic client with secret key
+                        client = anthropic.Anthropic(api_key=api_key)
                         
                         # Store results
                         results = {}
@@ -257,6 +282,7 @@ else:
                                 )
                         
                         st.success(f"✅ Successfully generated {len(selected_audiences)} audience summary/summaries!")
+                        st.session_state.total_summaries += len(selected_audiences)
                         
                     except Exception as e:
                         st.error(f"Error: {str(e)}")
