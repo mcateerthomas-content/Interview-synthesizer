@@ -94,8 +94,9 @@ with col2:
                     if focus_options:
                         focus_context = f"\n\nPay special attention to these themes: {', '.join(focus_options)}"
                     
-                    # Create the prompt
-                    prompt = f"""Analyze this executive interview transcript and create a comprehensive synthesis for an audience of {audience}.
+                    # Define audience-specific prompts with dramatic differentiation
+                    audience_prompts = {
+                        "Board Directors": f"""Analyze this executive interview transcript and create a board-level synthesis focused on governance, oversight, and fiduciary responsibilities.
 
 TRANSCRIPT:
 {transcript}
@@ -104,22 +105,96 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} compelling, punchy headlines that capture the key insight or most surprising element. Make them journalistic and engaging - avoid generic phrases. Each headline should offer a distinct angle or emphasis.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines that emphasize governance implications, strategic oversight, or board-level decisions. Frame them as questions or imperatives that boards must address.
 
-2. NARRATIVE SUMMARY: Write a {word_count}-word synthesis in narrative, journalistic style with 2-3 descriptive subheadings. Structure:
-   - Open with the most compelling or surprising insight
-   - Use natural transitions between ideas
-   - Include specific examples, quotes, or anecdotes from the transcript
-   - Highlight surprising, counterintuitive, or actionable insights
-   - End with pragmatic takeaways
-   - Write in clear, active voice
-   - Bold key facts for scannability
+2. EXECUTIVE BRIEFING ({word_count} words): Write in a deliberative, governance-focused style with these subheadings:
+   - **Strategic Oversight Implications**: What board-level decisions or oversight questions emerge?
+   - **Risk & Governance Considerations**: What risks, compliance issues, or governance practices are highlighted?
+   - **Fiduciary Takeaways**: What should boards be monitoring, challenging, or ensuring?
+   
+   Open with the most critical governance implication. Emphasize long-term value creation, stakeholder accountability, and board effectiveness. Use cautious, considered tone appropriate for fiduciary decision-making. Bold key governance facts.
 
-3. KEY INSIGHTS: List 5 interesting or surprising insights from the interview (bullet points OK here)
+3. CRITICAL INSIGHTS FOR BOARDS: List 5 insights specifically relevant to board oversight and governance
 
-4. ACTIONABLE TAKEAWAYS: List 3-5 specific, pragmatic actions that {audience.lower()} can apply
+4. QUESTIONS FOR THE BOARD TO CONSIDER: Provide 5 probing questions that boards should discuss in executive session or with management
 
-Format your response with clear section headers."""
+5. BOARD ACTION ITEMS: List 3-5 specific oversight actions, committee assignments, or governance processes boards should implement""",
+
+                        "CEOs": f"""Analyze this executive interview transcript and create a CEO-focused synthesis emphasizing decisions, execution, and competitive positioning.
+
+TRANSCRIPT:
+{transcript}
+
+{focus_context}
+
+Please provide:
+
+1. HEADLINE OPTIONS: Generate {num_headlines} action-oriented headlines that frame decisions, trade-offs, or competitive moves. Make them direct and decisive.
+
+2. EXECUTIVE DECISION BRIEF ({word_count} words): Write in a direct, pragmatic style with these subheadings:
+   - **The Decision on the Table**: What choices must be made NOW?
+   - **Execution Challenges & Trade-offs**: What are the hard choices and implementation realities?
+   - **Competitive Implications**: How does this affect market position and competitive advantage?
+   
+   Open with the most urgent decision or competitive insight. Emphasize speed, execution, and results. Write with urgency and decisiveness. Bold key decision points and metrics.
+
+3. STRATEGIC INSIGHTS: List 5 insights about strategy, competition, or execution that matter for CEO decision-making
+
+4. IMMEDIATE ACTIONS: List 5 specific decisions or initiatives the CEO should launch this quarter
+
+5. KEY PERFORMANCE INDICATORS TO TRACK: Identify 3-5 metrics the CEO should monitor to measure progress""",
+
+                        "Senior Executives": f"""Analyze this executive interview transcript and create a synthesis focused on implementation, capability-building, and leading change.
+
+TRANSCRIPT:
+{transcript}
+
+{focus_context}
+
+Please provide:
+
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines that emphasize implementation challenges, organizational capabilities, or change management imperatives.
+
+2. LEADERSHIP IMPLEMENTATION GUIDE ({word_count} words): Write in a practical, team-oriented style with these subheadings:
+   - **The Implementation Challenge**: What does this mean for translating strategy into action?
+   - **Organizational Capabilities Required**: What skills, structures, or cultural shifts are needed?
+   - **Leading the Change**: How should senior executives mobilize their teams and manage resistance?
+   
+   Open with the most critical implementation challenge. Emphasize people, processes, and change management. Write with empathy for the messy reality of execution. Bold key capability gaps and team dynamics.
+
+3. CRITICAL SUCCESS FACTORS: List 5 insights about what separates successful implementation from failure
+
+4. HOW TO APPLY THIS IN YOUR ORGANIZATION: Provide 5 specific actions senior executives can take with their teams in the next 30 days
+
+5. COMMON PITFALLS TO AVOID: Identify 3-5 mistakes that derail implementation and how to avoid them""",
+
+                        "General Business Audience": f"""Analyze this executive interview transcript and create an accessible synthesis for a broad business audience.
+
+TRANSCRIPT:
+{transcript}
+
+{focus_context}
+
+Please provide:
+
+1. HEADLINE OPTIONS: Generate {num_headlines} engaging, accessible headlines that capture the most interesting or surprising elements for a general business reader.
+
+2. EXECUTIVE PERSPECTIVE ({word_count} words): Write in clear, journalistic style with these subheadings:
+   - **The Big Picture**: What's the overarching insight or trend?
+   - **Why It Matters**: How does this affect businesses, leaders, or the competitive landscape?
+   - **What's Changing**: What's different now compared to conventional wisdom?
+   
+   Open with the most compelling or surprising finding. Provide context for readers who may not be experts. Use accessible language and real-world examples. Bold key statistics and turning points.
+
+3. KEY TAKEAWAYS: List 5 insights that any business professional should understand
+
+4. PRACTICAL APPLICATIONS: List 5 ways readers can apply these insights in their own roles or organizations
+
+5. QUESTIONS FOR REFLECTION: Provide 3-5 thought-provoking questions readers should consider about their own businesses"""
+                    }
+                    
+                    # Select the appropriate prompt based on audience
+                    prompt = audience_prompts.get(audience, audience_prompts["General Business Audience"])
 
                     # Call Claude API
                     message = client.messages.create(
