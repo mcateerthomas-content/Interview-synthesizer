@@ -42,7 +42,7 @@ with col1:
     # Audience selection
     audience = st.selectbox(
         "Target Audience",
-        ["Board Directors + CEOs", "Senior Executives + HR Leaders", "CEOs + HR Leaders", "Executive Development Audience"],
+        ["Board Directors + CEOs", "Senior Executives + HR Leaders", "CEOs + HR Leaders", "Group Leader Resources"],
         help="Who will be reading this summary?"
     )
     
@@ -186,7 +186,7 @@ Please provide:
    - Add 1-2 sentences explaining why this matters for both strategic execution AND talent development
    - Choose quotes that show how business decisions and people decisions are interdependent (aim for 2-3 strategy-focused quotes and 2-3 people-focused quotes)""",
 
-                        "Executive Development Audience": f"""Analyze this executive interview transcript and create a facilitation toolkit for peer learning communities, executive coaches, and leadership development professionals.
+                        "Group Leader Resources": f"""Analyze this executive interview transcript and create a facilitation toolkit for peer learning communities, executive coaches, and leadership development professionals.
 
 TRANSCRIPT:
 {transcript}
