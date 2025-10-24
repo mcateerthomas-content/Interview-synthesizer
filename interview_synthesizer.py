@@ -1,270 +1,288 @@
 import streamlit as st
 import anthropic
-import os
+from datetime import datetime
+import re
 
 # Page configuration
 st.set_page_config(
     page_title="Executive Interview Synthesizer",
-    page_icon="📊",
+    page_icon="🎯",
     layout="wide"
 )
 
-# Title and description
-st.title("📊 Executive Interview Synthesizer")
+# Custom CSS for better formatting
 st.markdown("""
-Transform interview transcripts into polished executive summaries with multiple format options.
-Upload a transcript and select your preferences to generate professional content instantly.
-""")
+    <style>
+    .audience-header {
+        background-color: #f0f2f6;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+    .stMultiSelect > label {
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
-# Sidebar for API key and settings
+# Title and description
+st.title("🎯 Executive Interview Synthesizer")
+st.markdown("Transform interview transcripts into targeted summaries for multiple audiences simultaneously.")
+
+# Initialize session state
+if 'api_key' not in st.session_state:
+    st.session_state.api_key = ""
+
+# Sidebar for API key
 with st.sidebar:
-    st.header("⚙️ Settings")
-    api_key = st.text_input("Anthropic API Key", type="password", help="Enter your Anthropic API key")
+    st.header("⚙️ Configuration")
+    api_key = st.text_input("Anthropic API Key:", 
+                            type="password", 
+                            value=st.session_state.api_key,
+                            help="Enter your Anthropic API key")
+    if api_key:
+        st.session_state.api_key = api_key
+        st.success("✓ API key configured")
+    else:
+        st.warning("Please enter your API key")
     
-    st.markdown("---")
+    st.divider()
     st.markdown("### About")
-    st.markdown("This tool uses Claude to analyze executive interviews and generate professional summaries tailored to your audience.")
+    st.info("This tool processes interview transcripts and generates customized summaries for different executive audiences with distinct perspectives and priorities.")
 
-# Main interface
-col1, col2 = st.columns([1, 1])
-
-with col1:
-    st.header("Input")
+# Main content area
+if not st.session_state.api_key:
+    st.warning("👈 Please enter your Anthropic API key in the sidebar to continue")
+else:
+    # Create two columns
+    col1, col2 = st.columns([1, 1])
     
-    # Transcript input
-    transcript = st.text_area(
-        "Interview Transcript",
-        height=400,
-        placeholder="Paste your interview transcript here...",
-        help="Copy and paste the full interview transcript"
-    )
+    with col1:
+        st.header("📝 Input")
+        
+        # Multi-select for audiences
+        selected_audiences = st.multiselect(
+            "Select Target Audiences:",
+            ["Board Directors", "CEOs", "Senior Executives", "HR Leaders", "General Business Audience"],
+            default=["CEOs"],
+            help="Select one or more audiences to generate tailored summaries"
+        )
+        
+        # Transcript input
+        transcript = st.text_area(
+            "Paste Interview Transcript:",
+            height=400,
+            placeholder="Paste the full interview transcript here..."
+        )
+        
+        # Generate button
+        if st.button("🚀 Generate Summaries", type="primary", disabled=not (transcript and selected_audiences)):
+            if not selected_audiences:
+                st.error("Please select at least one target audience")
+            elif transcript:
+                with st.spinner(f"Generating summaries for {len(selected_audiences)} audience(s)..."):
+                    try:
+                        # Initialize Anthropic client
+                        client = anthropic.Anthropic(api_key=st.session_state.api_key)
+                        
+                        # Store results
+                        results = {}
+                        
+                        # Generate summary for each selected audience
+                        for audience in selected_audiences:
+                            
+                            # Audience-specific prompts
+                            audience_prompts = {
+                                "Board Directors": """
+                                Create a Board Directors summary focusing on:
+                                - Governance implications
+                                - Strategic oversight considerations  
+                                - Risk management insights
+                                - Long-term value creation
+                                
+                                Structure:
+                                1. ONE headline (max 8 words, compelling and strategic)
+                                2. Strategic Overview (100 words) - Focus on governance and oversight implications
+                                3. Key Governance Insights - 3 specific insights relevant to board oversight
+                                4. Risk Considerations - 2-3 potential risks or opportunities boards should monitor
+                                5. Questions for Management - 3 specific questions directors should ask
+                                6. Impactful Quotes - 3 verbatim quotes (max 33 words each) that resonate with board priorities
+                                """,
+                                
+                                "CEOs": """
+                                Create a CEO summary focusing on:
+                                - Strategic decisions and trade-offs
+                                - Organizational transformation
+                                - Competitive positioning
+                                - Leadership lessons
+                                
+                                Structure:
+                                1. ONE headline (max 8 words, action-oriented)
+                                2. Executive Summary (100 words) - Focus on strategic implications and decisions
+                                3. Strategic Imperatives - 3 critical actions or decisions
+                                4. Implementation Challenges - 2-3 key obstacles and how to address them  
+                                5. Leadership Lessons - 3 specific lessons for CEO-level leadership
+                                6. Impactful Quotes - 3 verbatim quotes (max 33 words each) that CEOs would find compelling
+                                """,
+                                
+                                "Senior Executives": """
+                                Create a Senior Executive summary focusing on:
+                                - Operational implementation
+                                - Team leadership applications
+                                - Cross-functional collaboration
+                                - Execution excellence
+                                
+                                Structure:
+                                1. ONE headline (max 8 words, implementation-focused)
+                                2. Operations Overview (100 words) - Focus on execution and team implications
+                                3. Implementation Roadmap - 3 specific steps for execution
+                                4. Team Applications - 3 ways to cascade insights to teams
+                                5. Cross-Functional Opportunities - 2-3 collaboration points
+                                6. Impactful Quotes - 3 verbatim quotes (max 33 words each) relevant to execution
+                                """,
+                                
+                                "HR Leaders": """
+                                Create an HR Leaders summary focusing on:
+                                - Talent development implications
+                                - Leadership pipeline building
+                                - Culture and capability development
+                                - Organizational effectiveness
+                                
+                                Structure:
+                                1. ONE headline (max 8 words, talent-focused)
+                                2. Talent Overview (100 words) - Focus on people and capability implications
+                                3. Leadership Development Applications - 3 specific ways to develop leaders
+                                4. Culture Building Insights - 3 cultural elements to reinforce or change
+                                5. Capability Gaps to Address - 2-3 skill or competency areas to develop
+                                6. Impactful Quotes - 3 verbatim quotes (max 33 words each) about talent or culture
+                                """,
+                                
+                                "General Business Audience": """
+                                Create a General Business summary focusing on:
+                                - Accessible business insights
+                                - Practical applications
+                                - Professional development
+                                - Industry trends
+                                
+                                Structure:
+                                1. ONE headline (max 8 words, broadly appealing)
+                                2. Overview (100 words) - Accessible explanation of key insights
+                                3. Key Takeaways - 3 main lessons in plain language
+                                4. Practical Applications - 3 ways any professional can apply these insights
+                                5. Industry Implications - 2-3 broader trends or changes highlighted
+                                6. Impactful Quotes - 3 verbatim quotes (max 33 words each) that resonate broadly
+                                """
+                            }
+                            
+                            prompt = f"""
+                            Analyze this interview transcript and create a targeted summary for {audience}.
+                            
+                            {audience_prompts[audience]}
+                            
+                            Requirements:
+                            - Headlines must be 8 words or less
+                            - All quotes must be verbatim from transcript, maximum 33 words
+                            - Make each audience version DRAMATICALLY different in focus and language
+                            - Be specific and actionable, not generic
+                            
+                            Transcript:
+                            {transcript}
+                            """
+                            
+                            message = client.messages.create(
+                                model="claude-3-5-sonnet-20241022",
+                                max_tokens=1500,
+                                temperature=0.3,
+                                messages=[{"role": "user", "content": prompt}]
+                            )
+                            
+                            results[audience] = message.content[0].text
+                        
+                        # Display results in the second column
+                        with col2:
+                            st.header("🎯 Generated Summaries")
+                            
+                            # Create tabs for each audience if multiple selected
+                            if len(selected_audiences) > 1:
+                                tabs = st.tabs(selected_audiences)
+                                for i, (tab, audience) in enumerate(zip(tabs, selected_audiences)):
+                                    with tab:
+                                        st.markdown(f'<div class="audience-header"><h3>{audience}</h3></div>', 
+                                                  unsafe_allow_html=True)
+                                        st.markdown(results[audience])
+                                        st.divider()
+                                        
+                                        # Download button for individual summary
+                                        st.download_button(
+                                            label=f"📥 Download {audience} Summary",
+                                            data=results[audience],
+                                            file_name=f"{audience.lower().replace(' ', '_')}_summary_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
+                                            mime="text/plain",
+                                            key=f"download_{audience}"
+                                        )
+                            else:
+                                # Single audience display
+                                audience = selected_audiences[0]
+                                st.markdown(f'<div class="audience-header"><h3>{audience}</h3></div>', 
+                                          unsafe_allow_html=True)
+                                st.markdown(results[audience])
+                                st.divider()
+                                
+                                # Download button for single summary
+                                st.download_button(
+                                    label=f"📥 Download {audience} Summary",
+                                    data=results[audience],
+                                    file_name=f"{audience.lower().replace(' ', '_')}_summary_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
+                                    mime="text/plain"
+                                )
+                            
+                            # If multiple audiences selected, offer combined download
+                            if len(selected_audiences) > 1:
+                                st.divider()
+                                combined_content = ""
+                                for audience in selected_audiences:
+                                    combined_content += f"\n{'='*50}\n"
+                                    combined_content += f"AUDIENCE: {audience.upper()}\n"
+                                    combined_content += f"{'='*50}\n\n"
+                                    combined_content += results[audience]
+                                    combined_content += "\n\n"
+                                
+                                st.download_button(
+                                    label="📥 Download All Summaries (Combined)",
+                                    data=combined_content,
+                                    file_name=f"all_summaries_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
+                                    mime="text/plain",
+                                    type="secondary"
+                                )
+                        
+                        st.success(f"✅ Successfully generated {len(selected_audiences)} audience summary/summaries!")
+                        
+                    except Exception as e:
+                        st.error(f"Error: {str(e)}")
+                        st.info("Please check your API key and try again.")
+            else:
+                st.warning("Please paste a transcript to analyze")
     
-    # Audience selection
-    audience = st.selectbox(
-        "Target Audience",
-        ["Board Directors + CEOs", "Senior Executives + HR Leaders", "CEOs + HR Leaders", "Group Leader Resources"],
-        help="Who will be reading this summary?"
-    )
-    
-    # Word count
-    word_count = st.selectbox(
-        "Word Count",
-        [350, 500, 800],
-        index=1,
-        help="Desired length of the narrative summary"
-    )
-    
-    # Number of headlines
-    num_headlines = st.slider(
-        "Number of Headline Options",
-        min_value=3,
-        max_value=7,
-        value=5,
-        help="How many headline variations to generate"
-    )
-    
-    # Focus areas
-    focus_options = st.multiselect(
-        "Focus Areas (optional)",
-        ["Leadership Insights", "Strategic Decisions", "Board Governance", 
-         "Stakeholder Management", "Organizational Culture", "Innovation & Technology",
-         "Crisis Management", "Succession Planning"],
-        help="Select specific themes to emphasize in the analysis"
-    )
-    
-    # Generate button
-    generate_button = st.button("🚀 Generate Summary", type="primary", use_container_width=True)
-
-with col2:
-    st.header("Output")
-    
-    if generate_button:
-        if not api_key:
-            st.error("⚠️ Please enter your Anthropic API key in the sidebar")
-        elif not transcript:
-            st.error("⚠️ Please paste an interview transcript")
-        else:
-            with st.spinner("Analyzing transcript and generating content..."):
-                try:
-                    # Initialize Anthropic client
-                    client = anthropic.Anthropic(api_key=api_key)
-                    
-                    # Build focus area context
-                    focus_context = ""
-                    if focus_options:
-                        focus_context = f"\n\nPay special attention to these themes: {', '.join(focus_options)}"
-                    
-                    # Define audience-specific prompts with dramatic differentiation
-                    audience_prompts = {
-                        "Board Directors + CEOs": f"""Analyze this executive interview transcript and create an integrated synthesis for both Board Directors (governance oversight) and CEOs (strategic execution).
-
-TRANSCRIPT:
-{transcript}
-
-{focus_context}
-
-Please provide:
-
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame both governance implications AND strategic decisions. Bridge board oversight with CEO execution.
-
-2. LEADERSHIP + STRATEGY SYNTHESIS ({word_count} words): Write in a deliberative yet action-oriented style with these subheadings:
-   - **Governance Oversight + Strategic Decision**: What requires board approval AND what the CEO must execute?
-   - **Risk, Opportunity & Execution Trade-offs**: What risks need board monitoring AND what execution challenges the CEO faces?
-   - **Board-CEO Collaboration Framework**: How boards and CEOs must work together for success
-   
-   Open with the most critical decision requiring both board oversight and CEO execution. Balance fiduciary caution with strategic urgency. Show interdependence between governance and management. Bold key oversight points and decision junctures.
-
-3. GOVERNANCE + STRATEGIC INSIGHTS: List 5 insights spanning both board oversight responsibilities and CEO execution imperatives
-
-4. DIFFERENTIATED ACTIONS:
-   - 3 Board Oversight Items: What boards must monitor, approve, or ensure
-   - 3 CEO Decisions: Strategic moves the CEO must make immediately
-   - 2 Board-CEO Collaborative Actions: Joint initiatives requiring aligned leadership
-
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes that reveal both governance wisdom AND strategic thinking. For each quote:
-   - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters for both board effectiveness AND CEO decision-making
-   - Choose quotes that bridge oversight and execution (aim for 2-3 governance-focused and 2-3 strategy-focused quotes)
-   - Prioritize impact over brevity - include full context needed for the quote to be truly instructive""",
-
-                        "Senior Executives + HR Leaders": f"""Analyze this executive interview transcript and create an integrated synthesis for both Senior Executives (implementation) and HR Leaders (talent development).
-
-TRANSCRIPT:
-{transcript}
-
-{focus_context}
-
-Please provide:
-
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame both implementation challenges AND talent implications. Bridge execution with people development.
-
-2. EXECUTION + TALENT SYNTHESIS ({word_count} words): Write in a practical, people-centered style with these subheadings:
-   - **Implementation Challenge + Talent Requirements**: What must be executed AND what capabilities are needed?
-   - **Organizational Capabilities + Cultural Shifts**: What skills, structures, and culture changes enable success?
-   - **Integrated Change + Development Plan**: How execution leaders and HR must collaborate
-   
-   Open with the most critical implementation challenge that requires significant talent development. Balance execution pragmatism with people development. Show how implementation and capability-building are inseparable. Bold key execution milestones and capability gaps.
-
-3. EXECUTION + TALENT INSIGHTS: List 5 insights spanning both implementation effectiveness and talent development, showing their connection
-
-4. DIFFERENTIATED ACTIONS:
-   - 3 Senior Executive Actions: Implementation steps for the next 30 days
-   - 3 HR Leader Initiatives: Talent programs to launch immediately  
-   - 2 Collaborative Execution + HR Actions: Joint initiatives requiring both leaders
-
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes that reveal both implementation wisdom AND talent development insights. For each quote:
-   - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters for both execution success AND people development
-   - Choose quotes that show how execution and capability-building interconnect (aim for 2-3 execution-focused and 2-3 talent-focused quotes)
-   - Prioritize impact over brevity - include full context needed for the quote to be truly instructive""",
-
-                        "CEOs + HR Leaders": f"""Analyze this executive interview transcript and create an integrated synthesis for both CEOs (strategic decisions) and HR Leaders (talent implications).
-
-TRANSCRIPT:
-{transcript}
-
-{focus_context}
-
-Please provide:
-
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame both strategic decisions AND talent implications. Make them bridge business strategy and people strategy.
-
-2. INTEGRATED EXECUTIVE SYNTHESIS ({word_count} words): Write in a strategic yet people-aware style with these subheadings:
-   - **Strategic Decision + Talent Implications**: What business decisions must be made AND what talent/leadership is required?
-   - **Organizational Capabilities Required**: What skills, culture, leadership bench, and HR systems are needed?
-   - **Integrated Action Plan**: How CEOs and HR leaders must collaborate to execute successfully
-   
-   Open with the most critical strategic decision that has major talent implications. Balance business outcomes with people development. Show how strategy and talent are inseparable. Bold key integration points between strategy and people.
-
-3. STRATEGIC + TALENT INSIGHTS: List 5 insights that span both business strategy and talent strategy, showing how they connect
-
-4. INTEGRATED ACTIONS: Provide specific actions for:
-   - 3 CEO Decisions: Strategic moves the CEO must make
-   - 3 HR Initiatives: Talent programs HR must launch
-   - 2 Collaborative CEO + HR Actions: Joint initiatives requiring both leaders
-
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes that reveal the intersection of strategy and talent. For each quote:
-   - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters for both strategic execution AND talent development
-   - Choose quotes that show how business decisions and people decisions are interdependent (aim for 2-3 strategy-focused quotes and 2-3 people-focused quotes)
-   - Prioritize impact over brevity - include full context needed for the quote to be truly instructive""",
-
-                        "Group Leader Resources": f"""Analyze this executive interview transcript and create a facilitation toolkit for peer learning communities, executive coaches, and leadership development professionals.
-
-TRANSCRIPT:
-{transcript}
-
-{focus_context}
-
-Please provide:
-
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame leadership themes, developmental questions, or key competencies demonstrated.
-
-2. LEADERSHIP CASE STUDY ({word_count} words): Write in a reflective, developmental style with these subheadings:
-   - **The Leadership Challenge**: What situation did the leader face? What made it difficult? What was at stake?
-   - **Leadership Competencies in Action**: What specific capabilities, behaviors, or mindsets were demonstrated? What could other leaders learn?
-   - **Application for Executive Development**: How can facilitators use this in programs? What discussions does this enable? What exercises does this support?
-   
-   Open with the most compelling leadership challenge or growth moment. Emphasize learning over judging. Use evidence-based developmental language. Bold key competencies and turning points.
-
-3. KEY COMPETENCIES DEMONSTRATED: List 5 specific leadership competencies with:
-   - **Competency name** (e.g., "Strategic Courage")
-   - **How it showed up** (specific behavior from transcript)
-   - **Why it mattered** (impact on outcomes)
-   - **Development implication** (how to build this in others)
-
-4. FACILITATION TOOLKIT: Provide 5 practical tools for peer learning sessions:
-   - **Discussion Prompts** (2-3 open-ended questions to spark dialogue)
-   - **Small Group Exercise** (one 15-20 minute breakout activity)
-   - **Self-Reflection Questions** (2-3 individual journaling prompts)
-   - **Application Planning** (one 30-day challenge or commitment)
-   - **Case Study Variation** (one "What if..." scenario for deeper exploration)
-
-5. MOST IMPACTFUL QUOTES: Extract 5 quotes with developmental power - revealing authentic struggles, vulnerability, growth moments, or challenging conventional thinking. For each quote:
-   - Provide the exact quote (in quotation marks)
-   - **Developmental insight:** What competency or principle this illustrates
-   - **Facilitation tip:** How to use this quote in a learning session (be specific about timing, framing, or follow-up questions)
-   - Prioritize impact over brevity - include full context, setup, and payoff needed for the quote to land powerfully in a learning environment"""
-                    }
-                    
-                    # Select the appropriate prompt based on audience
-                    prompt = audience_prompts.get(audience, audience_prompts["Board Directors + CEOs"])
-
-                    # Call Claude API
-                    message = client.messages.create(
-                        model="claude-sonnet-4-20250514",
-                        max_tokens=4000,
-                        messages=[
-                            {"role": "user", "content": prompt}
-                        ]
-                    )
-                    
-                    # Display results
-                    result = message.content[0].text
-                    
-                    # Add download button
-                    st.download_button(
-                        label="📥 Download Summary",
-                        data=result,
-                        file_name="executive_summary.txt",
-                        mime="text/plain",
-                        use_container_width=True
-                    )
-                    
-                    st.markdown("---")
-                    
-                    # Display the generated content
-                    st.markdown(result)
-                    
-                except anthropic.APIError as e:
-                    st.error(f"❌ API Error: {str(e)}")
-                except Exception as e:
-                    st.error(f"❌ Error: {str(e)}")
+    with col2:
+        if not transcript or not selected_audiences:
+            st.header("🎯 Generated Summaries")
+            st.info("Your generated summaries will appear here once you:\n1. Select one or more target audiences\n2. Paste a transcript\n3. Click 'Generate Summaries'")
+            
+            # Show example of what's possible
+            with st.expander("💡 Multi-Select Examples"):
+                st.markdown("""
+                **Single Audience:** Select just "CEOs" for a focused CEO perspective
+                
+                **Leadership Team:** Select "CEOs" + "Senior Executives" for C-suite and their direct reports
+                
+                **Board Package:** Select "Board Directors" + "CEOs" for board meeting preparation
+                
+                **Full Organization:** Select all five audiences to create comprehensive communications for different levels
+                
+                **HR Initiative:** Select "HR Leaders" + "Senior Executives" for talent development rollout
+                """)
 
 # Footer
-st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: #666; font-size: 0.9em;'>
-    <p>Built with Claude & Streamlit | Powered by Anthropic API</p>
-</div>
-""", unsafe_allow_html=True)
+st.divider()
+st.caption("Executive Interview Synthesizer | Powered by Claude")
