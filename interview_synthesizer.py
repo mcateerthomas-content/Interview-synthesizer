@@ -121,10 +121,11 @@ Please provide:
    - 3 CEO Decisions: Strategic moves the CEO must make immediately
    - 2 Board-CEO Collaborative Actions: Joint initiatives requiring aligned leadership
 
-5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 powerful quotes that reveal both governance wisdom AND strategic thinking. For each quote:
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes that reveal both governance wisdom AND strategic thinking. For each quote:
    - Provide the exact quote (in quotation marks)
    - Add 1-2 sentences explaining why this matters for both board effectiveness AND CEO decision-making
-   - Choose quotes that bridge oversight and execution (aim for 2-3 governance-focused and 2-3 strategy-focused quotes)""",
+   - Choose quotes that bridge oversight and execution (aim for 2-3 governance-focused and 2-3 strategy-focused quotes)
+   - Prioritize impact over brevity - include full context needed for the quote to be truly instructive""",
 
                         "Senior Executives + HR Leaders": f"""Analyze this executive interview transcript and create an integrated synthesis for both Senior Executives (implementation) and HR Leaders (talent development).
 
@@ -151,10 +152,11 @@ Please provide:
    - 3 HR Leader Initiatives: Talent programs to launch immediately  
    - 2 Collaborative Execution + HR Actions: Joint initiatives requiring both leaders
 
-5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 powerful quotes that reveal both implementation wisdom AND talent development insights. For each quote:
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes that reveal both implementation wisdom AND talent development insights. For each quote:
    - Provide the exact quote (in quotation marks)
    - Add 1-2 sentences explaining why this matters for both execution success AND people development
-   - Choose quotes that show how execution and capability-building interconnect (aim for 2-3 execution-focused and 2-3 talent-focused quotes)""",
+   - Choose quotes that show how execution and capability-building interconnect (aim for 2-3 execution-focused and 2-3 talent-focused quotes)
+   - Prioritize impact over brevity - include full context needed for the quote to be truly instructive""",
 
                         "CEOs + HR Leaders": f"""Analyze this executive interview transcript and create an integrated synthesis for both CEOs (strategic decisions) and HR Leaders (talent implications).
 
@@ -181,10 +183,11 @@ Please provide:
    - 3 HR Initiatives: Talent programs HR must launch
    - 2 Collaborative CEO + HR Actions: Joint initiatives requiring both leaders
 
-5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 powerful quotes that reveal the intersection of strategy and talent. For each quote:
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes that reveal the intersection of strategy and talent. For each quote:
    - Provide the exact quote (in quotation marks)
    - Add 1-2 sentences explaining why this matters for both strategic execution AND talent development
-   - Choose quotes that show how business decisions and people decisions are interdependent (aim for 2-3 strategy-focused quotes and 2-3 people-focused quotes)""",
+   - Choose quotes that show how business decisions and people decisions are interdependent (aim for 2-3 strategy-focused quotes and 2-3 people-focused quotes)
+   - Prioritize impact over brevity - include full context needed for the quote to be truly instructive""",
 
                         "Group Leader Resources": f"""Analyze this executive interview transcript and create a facilitation toolkit for peer learning communities, executive coaches, and leadership development professionals.
 
@@ -217,10 +220,11 @@ Please provide:
    - **Application Planning** (one 30-day challenge or commitment)
    - **Case Study Variation** (one "What if..." scenario for deeper exploration)
 
-5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 quotes with developmental power - revealing authentic struggles, vulnerability, growth moments, or challenging conventional thinking. For each quote:
+5. MOST IMPACTFUL QUOTES: Extract 5 quotes with developmental power - revealing authentic struggles, vulnerability, growth moments, or challenging conventional thinking. For each quote:
    - Provide the exact quote (in quotation marks)
    - **Developmental insight:** What competency or principle this illustrates
-   - **Facilitation tip:** How to use this quote in a learning session (be specific about timing, framing, or follow-up questions)"""
+   - **Facilitation tip:** How to use this quote in a learning session (be specific about timing, framing, or follow-up questions)
+   - Prioritize impact over brevity - include full context, setup, and payoff needed for the quote to land powerfully in a learning environment"""
                     }
                     
                     # Select the appropriate prompt based on audience
