@@ -190,7 +190,10 @@ Please provide:
 
 4. APPLICATIONS FOR HR LEADERS: Provide 5 specific ways to apply these insights in leadership development programs, coaching, or talent processes
 
-5. DISCUSSION QUESTIONS FOR PEER LEARNING: Provide 5 thought-provoking questions for executive development cohorts or peer learning communities to discuss""",
+5. MOST IMPACTFUL QUOTES: Extract 5 powerful, memorable quotes from the transcript that reveal leadership wisdom, authentic experiences, or compelling insights. For each quote:
+   - Provide the exact quote (in quotation marks)
+   - Add 1-2 sentences explaining why this quote matters for leadership development or what it reveals about effective leadership
+   - Choose quotes that are vivid, honest, surprising, or particularly instructive""",
 
                         "General Business Audience": f"""Analyze this executive interview transcript and create an accessible synthesis for a broad business audience.
 
