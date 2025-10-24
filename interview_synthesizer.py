@@ -42,7 +42,7 @@ with col1:
     # Audience selection
     audience = st.selectbox(
         "Target Audience",
-        ["Board Directors", "CEOs", "Senior Executives", "General Business Audience"],
+        ["Board Directors", "CEOs", "Senior Executives", "HR Leaders", "General Business Audience"],
         help="Who will be reading this summary?"
     )
     
@@ -167,6 +167,30 @@ Please provide:
 4. HOW TO APPLY THIS IN YOUR ORGANIZATION: Provide 5 specific actions senior executives can take with their teams in the next 30 days
 
 5. COMMON PITFALLS TO AVOID: Identify 3-5 mistakes that derail implementation and how to avoid them""",
+
+                        "HR Leaders": f"""Analyze this executive interview transcript and create a synthesis focused on talent development, organizational culture, and leadership capabilities.
+
+TRANSCRIPT:
+{transcript}
+
+{focus_context}
+
+Please provide:
+
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines that emphasize leadership competencies, culture shifts, talent development, or people challenges.
+
+2. TALENT & LEADERSHIP INSIGHTS ({word_count} words): Write in a developmental, people-centered style with these subheadings:
+   - **Leadership Competencies on Display**: What leadership capabilities, behaviors, or mindsets are demonstrated?
+   - **Talent & Culture Implications**: What does this reveal about developing leaders, building culture, or managing talent?
+   - **Application for Executive Development**: How can HR leaders use these insights in leadership programs or succession planning?
+   
+   Open with the most compelling leadership or talent insight. Emphasize competency development, culture-building, and how leaders grow. Write with a developmental mindset focused on unlocking human potential. Bold key leadership behaviors and cultural attributes.
+
+3. KEY LEADERSHIP LESSONS: List 5 insights about leadership effectiveness, talent development, or organizational culture
+
+4. APPLICATIONS FOR HR LEADERS: Provide 5 specific ways to apply these insights in leadership development programs, coaching, or talent processes
+
+5. DISCUSSION QUESTIONS FOR PEER LEARNING: Provide 5 thought-provoking questions for executive development cohorts or peer learning communities to discuss""",
 
                         "General Business Audience": f"""Analyze this executive interview transcript and create an accessible synthesis for a broad business audience.
 
