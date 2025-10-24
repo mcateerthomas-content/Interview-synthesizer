@@ -42,7 +42,7 @@ with col1:
     # Audience selection
     audience = st.selectbox(
         "Target Audience",
-        ["Board Directors", "CEOs", "Senior Executives", "HR Leaders", "General Business Audience"],
+        ["Board Directors + CEOs", "Senior Executives + HR Leaders", "CEOs + HR Leaders", "Executive Development Audience"],
         help="Who will be reading this summary?"
     )
     
@@ -96,7 +96,7 @@ with col2:
                     
                     # Define audience-specific prompts with dramatic differentiation
                     audience_prompts = {
-                        "Board Directors": f"""Analyze this executive interview transcript and create a board-level synthesis focused on governance, oversight, and fiduciary responsibilities.
+                        "Board Directors + CEOs": f"""Analyze this executive interview transcript and create an integrated synthesis for both Board Directors (governance oversight) and CEOs (strategic execution).
 
 TRANSCRIPT:
 {transcript}
@@ -105,25 +105,28 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that emphasize governance implications, strategic oversight, or board-level decisions. Frame them as questions or imperatives that boards must address.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame both governance implications AND strategic decisions. Bridge board oversight with CEO execution.
 
-2. EXECUTIVE BRIEFING ({word_count} words): Write in a deliberative, governance-focused style with these subheadings:
-   - **Strategic Oversight Implications**: What board-level decisions or oversight questions emerge?
-   - **Risk & Governance Considerations**: What risks, compliance issues, or governance practices are highlighted?
-   - **Fiduciary Takeaways**: What should boards be monitoring, challenging, or ensuring?
+2. LEADERSHIP + STRATEGY SYNTHESIS ({word_count} words): Write in a deliberative yet action-oriented style with these subheadings:
+   - **Governance Oversight + Strategic Decision**: What requires board approval AND what the CEO must execute?
+   - **Risk, Opportunity & Execution Trade-offs**: What risks need board monitoring AND what execution challenges the CEO faces?
+   - **Board-CEO Collaboration Framework**: How boards and CEOs must work together for success
    
-   Open with the most critical governance implication. Emphasize long-term value creation, stakeholder accountability, and board effectiveness. Use cautious, considered tone appropriate for fiduciary decision-making. Bold key governance facts.
+   Open with the most critical decision requiring both board oversight and CEO execution. Balance fiduciary caution with strategic urgency. Show interdependence between governance and management. Bold key oversight points and decision junctures.
 
-3. CRITICAL INSIGHTS FOR BOARDS: List 5 insights specifically relevant to board oversight and governance
+3. GOVERNANCE + STRATEGIC INSIGHTS: List 5 insights spanning both board oversight responsibilities and CEO execution imperatives
 
-4. QUESTIONS FOR THE BOARD TO CONSIDER: Provide 5 probing questions that boards should discuss in executive session or with management
+4. DIFFERENTIATED ACTIONS:
+   - 3 Board Oversight Items: What boards must monitor, approve, or ensure
+   - 3 CEO Decisions: Strategic moves the CEO must make immediately
+   - 2 Board-CEO Collaborative Actions: Joint initiatives requiring aligned leadership
 
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal governance wisdom, board dynamics, or strategic oversight insights. For each quote:
+5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 powerful quotes that reveal both governance wisdom AND strategic thinking. For each quote:
    - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters for board effectiveness or what governance principle it illustrates
-   - Choose quotes that address fiduciary duty, oversight, risk, or strategic governance""",
+   - Add 1-2 sentences explaining why this matters for both board effectiveness AND CEO decision-making
+   - Choose quotes that bridge oversight and execution (aim for 2-3 governance-focused and 2-3 strategy-focused quotes)""",
 
-                        "CEOs": f"""Analyze this executive interview transcript and create a CEO-focused synthesis emphasizing decisions, execution, and competitive positioning.
+                        "Senior Executives + HR Leaders": f"""Analyze this executive interview transcript and create an integrated synthesis for both Senior Executives (implementation) and HR Leaders (talent development).
 
 TRANSCRIPT:
 {transcript}
@@ -132,25 +135,28 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} action-oriented headlines (maximum 8 words each) that frame decisions, trade-offs, or competitive moves. Make them direct and decisive.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame both implementation challenges AND talent implications. Bridge execution with people development.
 
-2. EXECUTIVE DECISION BRIEF ({word_count} words): Write in a direct, pragmatic style with these subheadings:
-   - **The Decision on the Table**: What choices must be made NOW?
-   - **Execution Challenges & Trade-offs**: What are the hard choices and implementation realities?
-   - **Competitive Implications**: How does this affect market position and competitive advantage?
+2. EXECUTION + TALENT SYNTHESIS ({word_count} words): Write in a practical, people-centered style with these subheadings:
+   - **Implementation Challenge + Talent Requirements**: What must be executed AND what capabilities are needed?
+   - **Organizational Capabilities + Cultural Shifts**: What skills, structures, and culture changes enable success?
+   - **Integrated Change + Development Plan**: How execution leaders and HR must collaborate
    
-   Open with the most urgent decision or competitive insight. Emphasize speed, execution, and results. Write with urgency and decisiveness. Bold key decision points and metrics.
+   Open with the most critical implementation challenge that requires significant talent development. Balance execution pragmatism with people development. Show how implementation and capability-building are inseparable. Bold key execution milestones and capability gaps.
 
-3. STRATEGIC INSIGHTS: List 5 insights about strategy, competition, or execution that matter for CEO decision-making
+3. EXECUTION + TALENT INSIGHTS: List 5 insights spanning both implementation effectiveness and talent development, showing their connection
 
-4. IMMEDIATE ACTIONS: List 5 specific decisions or initiatives the CEO should launch this quarter
+4. DIFFERENTIATED ACTIONS:
+   - 3 Senior Executive Actions: Implementation steps for the next 30 days
+   - 3 HR Leader Initiatives: Talent programs to launch immediately  
+   - 2 Collaborative Execution + HR Actions: Joint initiatives requiring both leaders
 
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal decision-making wisdom, execution insights, or competitive thinking. For each quote:
+5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 powerful quotes that reveal both implementation wisdom AND talent development insights. For each quote:
    - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters for CEO effectiveness or what it reveals about strategic decision-making
-   - Choose quotes that are tactical, decisive, or reveal hard-won lessons about leading organizations""",
+   - Add 1-2 sentences explaining why this matters for both execution success AND people development
+   - Choose quotes that show how execution and capability-building interconnect (aim for 2-3 execution-focused and 2-3 talent-focused quotes)""",
 
-                        "Senior Executives": f"""Analyze this executive interview transcript and create a synthesis focused on implementation, capability-building, and leading change.
+                        "CEOs + HR Leaders": f"""Analyze this executive interview transcript and create an integrated synthesis for both CEOs (strategic decisions) and HR Leaders (talent implications).
 
 TRANSCRIPT:
 {transcript}
@@ -159,25 +165,28 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that emphasize implementation challenges, organizational capabilities, or change management imperatives.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame both strategic decisions AND talent implications. Make them bridge business strategy and people strategy.
 
-2. LEADERSHIP IMPLEMENTATION GUIDE ({word_count} words): Write in a practical, team-oriented style with these subheadings:
-   - **The Implementation Challenge**: What does this mean for translating strategy into action?
-   - **Organizational Capabilities Required**: What skills, structures, or cultural shifts are needed?
-   - **Leading the Change**: How should senior executives mobilize their teams and manage resistance?
+2. INTEGRATED EXECUTIVE SYNTHESIS ({word_count} words): Write in a strategic yet people-aware style with these subheadings:
+   - **Strategic Decision + Talent Implications**: What business decisions must be made AND what talent/leadership is required?
+   - **Organizational Capabilities Required**: What skills, culture, leadership bench, and HR systems are needed?
+   - **Integrated Action Plan**: How CEOs and HR leaders must collaborate to execute successfully
    
-   Open with the most critical implementation challenge. Emphasize people, processes, and change management. Write with empathy for the messy reality of execution. Bold key capability gaps and team dynamics.
+   Open with the most critical strategic decision that has major talent implications. Balance business outcomes with people development. Show how strategy and talent are inseparable. Bold key integration points between strategy and people.
 
-3. CRITICAL SUCCESS FACTORS: List 5 insights about what separates successful implementation from failure
+3. STRATEGIC + TALENT INSIGHTS: List 5 insights that span both business strategy and talent strategy, showing how they connect
 
-4. HOW TO APPLY THIS IN YOUR ORGANIZATION: Provide 5 specific actions senior executives can take with their teams in the next 30 days
+4. INTEGRATED ACTIONS: Provide specific actions for:
+   - 3 CEO Decisions: Strategic moves the CEO must make
+   - 3 HR Initiatives: Talent programs HR must launch
+   - 2 Collaborative CEO + HR Actions: Joint initiatives requiring both leaders
 
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal implementation wisdom, change leadership insights, or team dynamics. For each quote:
+5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 powerful quotes that reveal the intersection of strategy and talent. For each quote:
    - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters for execution or what it reveals about leading organizational change
-   - Choose quotes that are practical, honest about challenges, or reveal lessons about mobilizing teams""",
+   - Add 1-2 sentences explaining why this matters for both strategic execution AND talent development
+   - Choose quotes that show how business decisions and people decisions are interdependent (aim for 2-3 strategy-focused quotes and 2-3 people-focused quotes)""",
 
-                        "HR Leaders": f"""Analyze this executive interview transcript and create a synthesis focused on talent development, organizational culture, and leadership capabilities.
+                        "Executive Development Audience": f"""Analyze this executive interview transcript and create a facilitation toolkit for peer learning communities, executive coaches, and leadership development professionals.
 
 TRANSCRIPT:
 {transcript}
@@ -186,54 +195,36 @@ TRANSCRIPT:
 
 Please provide:
 
-1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that emphasize leadership competencies, culture shifts, talent development, or people challenges.
+1. HEADLINE OPTIONS: Generate {num_headlines} headlines (maximum 8 words each) that frame leadership themes, developmental questions, or key competencies demonstrated.
 
-2. TALENT & LEADERSHIP INSIGHTS ({word_count} words): Write in a developmental, people-centered style with these subheadings:
-   - **Leadership Competencies on Display**: What leadership capabilities, behaviors, or mindsets are demonstrated?
-   - **Talent & Culture Implications**: What does this reveal about developing leaders, building culture, or managing talent?
-   - **Application for Executive Development**: How can HR leaders use these insights in leadership programs or succession planning?
+2. LEADERSHIP CASE STUDY ({word_count} words): Write in a reflective, developmental style with these subheadings:
+   - **The Leadership Challenge**: What situation did the leader face? What made it difficult? What was at stake?
+   - **Leadership Competencies in Action**: What specific capabilities, behaviors, or mindsets were demonstrated? What could other leaders learn?
+   - **Application for Executive Development**: How can facilitators use this in programs? What discussions does this enable? What exercises does this support?
    
-   Open with the most compelling leadership or talent insight. Emphasize competency development, culture-building, and how leaders grow. Write with a developmental mindset focused on unlocking human potential. Bold key leadership behaviors and cultural attributes.
+   Open with the most compelling leadership challenge or growth moment. Emphasize learning over judging. Use evidence-based developmental language. Bold key competencies and turning points.
 
-3. KEY LEADERSHIP LESSONS: List 5 insights about leadership effectiveness, talent development, or organizational culture
+3. KEY COMPETENCIES DEMONSTRATED: List 5 specific leadership competencies with:
+   - **Competency name** (e.g., "Strategic Courage")
+   - **How it showed up** (specific behavior from transcript)
+   - **Why it mattered** (impact on outcomes)
+   - **Development implication** (how to build this in others)
 
-4. APPLICATIONS FOR HR LEADERS: Provide 5 specific ways to apply these insights in leadership development programs, coaching, or talent processes
+4. FACILITATION TOOLKIT: Provide 5 practical tools for peer learning sessions:
+   - **Discussion Prompts** (2-3 open-ended questions to spark dialogue)
+   - **Small Group Exercise** (one 15-20 minute breakout activity)
+   - **Self-Reflection Questions** (2-3 individual journaling prompts)
+   - **Application Planning** (one 30-day challenge or commitment)
+   - **Case Study Variation** (one "What if..." scenario for deeper exploration)
 
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that reveal leadership wisdom, authentic experiences, or compelling insights. For each quote:
+5. MOST IMPACTFUL QUOTES (maximum 33 words each): Extract 5 quotes with developmental power - revealing authentic struggles, vulnerability, growth moments, or challenging conventional thinking. For each quote:
    - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this quote matters for leadership development or what it reveals about effective leadership
-   - Choose quotes that are vivid, honest, surprising, or particularly instructive""",
-
-                        "General Business Audience": f"""Analyze this executive interview transcript and create an accessible synthesis for a broad business audience.
-
-TRANSCRIPT:
-{transcript}
-
-{focus_context}
-
-Please provide:
-
-1. HEADLINE OPTIONS: Generate {num_headlines} engaging, accessible headlines (maximum 8 words each) that capture the most interesting or surprising elements for a general business reader.
-
-2. EXECUTIVE PERSPECTIVE ({word_count} words): Write in clear, journalistic style with these subheadings:
-   - **The Big Picture**: What's the overarching insight or trend?
-   - **Why It Matters**: How does this affect businesses, leaders, or the competitive landscape?
-   - **What's Changing**: What's different now compared to conventional wisdom?
-   
-   Open with the most compelling or surprising finding. Provide context for readers who may not be experts. Use accessible language and real-world examples. Bold key statistics and turning points.
-
-3. KEY TAKEAWAYS: List 5 insights that any business professional should understand
-
-4. PRACTICAL APPLICATIONS: List 5 ways readers can apply these insights in their own roles or organizations
-
-5. MOST IMPACTFUL QUOTES: Extract 5 powerful quotes (maximum 33 words each) that are memorable, surprising, or particularly instructive for a business audience. For each quote:
-   - Provide the exact quote (in quotation marks)
-   - Add 1-2 sentences explaining why this matters or what makes it noteworthy
-   - Choose quotes that are accessible, thought-provoking, or challenge conventional business thinking"""
+   - **Developmental insight:** What competency or principle this illustrates
+   - **Facilitation tip:** How to use this quote in a learning session (be specific about timing, framing, or follow-up questions)"""
                     }
                     
                     # Select the appropriate prompt based on audience
-                    prompt = audience_prompts.get(audience, audience_prompts["General Business Audience"])
+                    prompt = audience_prompts.get(audience, audience_prompts["Board Directors + CEOs"])
 
                     # Call Claude API
                     message = client.messages.create(
